@@ -16,6 +16,7 @@ package pool
 
 import (
 	"net"
+	"strings"
 	"sync"
 	"time"
 )
@@ -110,6 +111,30 @@ func (connP *ConnPool) Put(c *net.TCPConn, forceClose bool) {
 	pool.Put(c)
 
 	return
+}
+
+func (connP *ConnPool) CheckErrorForPutConnect(c *net.TCPConn, target string, err error) {
+	if c == nil {
+		return
+	}
+	if strings.Contains(err.Error(), "use of closed network connection") {
+		c.Close()
+		connP.ReleaseAllConnect(target)
+		return
+	}
+	if err != nil {
+		c.Close()
+		return
+	}
+	addr := c.RemoteAddr().String()
+	connP.Lock()
+	pool, ok := connP.pools[addr]
+	connP.Unlock()
+	if !ok {
+		c.Close()
+		return
+	}
+	pool.Put(c)
 }
 
 func (connP *ConnPool) ReleaseAllConnect(target string) {
