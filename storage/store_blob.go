@@ -24,8 +24,6 @@ import (
 
 	"github.com/juju/errors"
 	"github.com/tiglabs/containerfs/proto"
-	"github.com/tiglabs/containerfs/util"
-	"sync/atomic"
 )
 
 const (
