@@ -226,18 +226,15 @@ func (c *BlobFile) doCommit() (err error) {
 
 	err = catchupDeleteIndex(name+".idx", name+".cpx")
 	if err != nil {
-		c.loadTree(name)
 		return
 	}
 
 	err = os.Rename(name+".cpd", name)
 	if err != nil {
-		c.loadTree(name)
 		return
 	}
 	err = os.Rename(name+".cpx", name+".idx")
 	if err != nil {
-		c.loadTree(name)
 		return
 	}
 
