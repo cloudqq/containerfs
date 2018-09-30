@@ -1,3 +1,5 @@
+//from https://github.com/hashicorp/raft.git thanss
+
 package simplelru
 
 // LRUCache is the interface for simple LRU cache.
